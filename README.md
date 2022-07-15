@@ -26,6 +26,5 @@ Essentially this makes your entire Express application into a pure function, tha
 to the overriden HTTP request and produce a referencially transparent response.
 
 ### Known issues:
-* The code currently lives as a PoC inside my playground / reference TS/React project. If and when I get enough validation that this should be a stand-alone library, I will move the HTTP bridge to its own NPM package / repo.
-* I have 9 test cases with one failing, but I know why the bug happens, and at this point I’m stopping for validation before investing more time into this.
+* Some test cases are not covered yet
 * The solution relies on Nock internals for hijacking http.request (and https.request) so it’s completely UI-layer independent. If I move forward I’ll reimplement or copy the code so as not to rely on Nock.
