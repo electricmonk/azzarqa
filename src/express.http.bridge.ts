@@ -2,14 +2,7 @@ import { EventEmitter } from "events";
 import { Application, Response } from 'express';
 import { headersFieldNamesToLowerCase, headersInputToRawArray, normalizeClientRequestArgs, overrideRequests, restoreOverriddenRequests } from 'nock/lib/common';
 import { PassThrough } from 'stream';
-import winston from 'winston';
 
-const logger = winston.createLogger({
-  level: 'error',
-  transports: [
-    new winston.transports.Console(),
-  ]
-});
 
 function toBuffer(chunk: unknown): Buffer {
 
@@ -73,11 +66,9 @@ function aFakeResponse(connection: EventEmitter) {
     },
 
     end: (chunk: Uint8Array | string) => {
-      logger.http('ending response');
       responseStream.write(toBuffer(chunk));
       responseStream.end();
       connection.emit('done');
-      logger.http('ended response');
     },
     on: responseStream.on.bind(responseStream),
     once: responseStream.on.bind(responseStream),
@@ -104,21 +95,16 @@ export function wireHttpCallsTo(logic: Application) {
         if (!invoked) {
           invoked = true;
           logic(expressRequest, expressResponse as unknown as Response )
-          logger.http('server invoked');
         }
       }
 
       function respond() {
-        logger.http('calling callback');
         callback.bind(overriddenRequest)(expressResponse)
-        logger.http('called callback');
       }
 
       connection.once('flush', invokeServer);
       connection.once('done', respond);
-      
-      // setTimeout(invokeServer, 0); // so that the calling code can subscribe to calls before we execute the logic TODO consider doing this in an event handler
-      
+           
       return {
         on: (event: string, callback: () => any) => { 
         },
