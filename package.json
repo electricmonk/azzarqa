@@ -1,6 +1,6 @@
 {
   "name": "azzarqa",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "HTTP-less bridge between http(s).request and http.server",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
